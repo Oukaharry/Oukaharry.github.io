@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (err) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+      document.documentElement.classList.remove("no-js");
+      document.documentElement.classList.add("js");
+    })();
+  </script>
+  <title>C Pointers and the Shell · Harrison Odhiambo Ouka, Software Developer</title>
+  <meta name="description" content="Software developer Harrison Odhiambo Ouka on his public ALX coursework: C pointers, arrays, function pointers, and the Unix shell commands that run the programs." />
+  <meta name="author" content="Harrison Odhiambo Ouka" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="theme-color" content="#f3efe6" />
+  <link rel="canonical" href="https://oukaharry.github.io/blog/c-pointers-and-the-shell/" />
+  <link rel="alternate" hreflang="en" href="https://oukaharry.github.io/blog/c-pointers-and-the-shell/" />
+  <link rel="alternate" type="application/rss+xml" title="Harrison Odhiambo Ouka — RSS" href="https://oukaharry.github.io/feed.xml" />
+  <link rel="alternate" type="application/atom+xml" title="Harrison Odhiambo Ouka — Atom" href="https://oukaharry.github.io/atom.xml" />
+  <link rel="me" href="https://github.com/Oukaharry" />
+  <link rel="me" href="https://www.linkedin.com/in/harrisonouka/" />
+  <link rel="me" href="https://dev.to/harrisonouka" />
+  <meta property="og:site_name" content="Harrison Odhiambo Ouka" />
+  <meta property="og:locale" content="en_KE" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="C Pointers and the Shell · Harrison Odhiambo Ouka, Software Developer" />
+  <meta property="og:description" content="Software developer Harrison Odhiambo Ouka on his public ALX coursework: C pointers, arrays, function pointers, and the Unix shell commands that run the programs." />
+  <meta property="og:url" content="https://oukaharry.github.io/blog/c-pointers-and-the-shell/" />
+  <meta property="og:image" content="https://oukaharry.github.io/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Harrison Odhiambo Ouka, software developer in Nairobi, also known as Harry Ouka and Ouka Harry." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="C Pointers and the Shell · Harrison Odhiambo Ouka, Software Developer" />
+  <meta name="twitter:description" content="Software developer Harrison Odhiambo Ouka on his public ALX coursework: C pointers, arrays, function pointers, and the Unix shell commands that run the programs." />
+  <meta name="twitter:image" content="https://oukaharry.github.io/assets/og.png" />
+  <meta name="twitter:image:alt" content="Harrison Odhiambo Ouka, software developer in Nairobi, also known as Harry Ouka and Ouka Harry." />
+  <!--
+  Google Search Console verification placeholder.
+  Set GOOGLE_SITE_VERIFICATION in /config/search-console.txt
+  (replace PASTE_TOKEN_HERE), then run: python3 scripts/build_site.py
+  The meta tag to add is:
+  <meta name="google-site-verification" content="PASTE_TOKEN_HERE" />
+-->
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <meta property="article:published_time" content="2026-11-12" />
+  <meta property="article:modified_time" content="2026-11-12" />
+  <meta property="article:author" content="Harrison Odhiambo Ouka" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://oukaharry.github.io/#person",
+      "name": "Harrison Odhiambo Ouka",
+      "alternateName": [
+        "Harry Ouka",
+        "Ouka Harry",
+        "Harrison Ouka"
+      ],
+      "jobTitle": "Software Developer",
+      "url": "https://oukaharry.github.io/",
+      "email": "harryodhiambo17@gmail.com",
+      "image": "https://oukaharry.github.io/assets/og.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Nairobi",
+        "addressCountry": "KE"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "The Catholic University of Eastern Africa"
+      },
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "degree",
+        "name": "BSc Computer Science",
+        "description": "2017–2021",
+        "recognizedBy": {
+          "@type": "CollegeOrUniversity",
+          "name": "The Catholic University of Eastern Africa"
+        }
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "blueedgefinancial.com",
+        "url": "https://blueedgefinancial.com/"
+      },
+      "hasOccupation": [
+        {
+          "@type": "Occupation",
+          "name": "Software Developer",
+          "description": "Software Developer at blueedgefinancial.com since September 2020"
+        },
+        {
+          "@type": "Occupation",
+          "name": "Foreign Exchange Consultant",
+          "description": "Freelance"
+        }
+      ],
+      "sameAs": [
+        "https://github.com/Oukaharry",
+        "https://www.linkedin.com/in/harrisonouka/",
+        "https://dev.to/harrisonouka",
+        "https://www.mql5.com/en/users/_mrharry",
+        "https://www.mql5.com/en/users/_harrison"
+      ]
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://oukaharry.github.io/blog/c-pointers-and-the-shell/#post",
+      "headline": "What C pointers and the shell are for",
+      "description": "Software developer Harrison Odhiambo Ouka on his public ALX coursework: C pointers, arrays, function pointers, and the Unix shell commands that run the programs.",
+      "datePublished": "2026-11-12",
+      "dateModified": "2026-11-12",
+      "wordCount": 975,
+      "inLanguage": "en",
+      "mainEntityOfPage": "https://oukaharry.github.io/blog/c-pointers-and-the-shell/",
+      "url": "https://oukaharry.github.io/blog/c-pointers-and-the-shell/",
+      "image": "https://oukaharry.github.io/assets/og.png",
+      "author": {
+        "@id": "https://oukaharry.github.io/#person"
+      },
+      "publisher": {
+        "@id": "https://oukaharry.github.io/#person"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="HO, initials of Harrison Odhiambo Ouka" width="36" height="36">
+  <rect width="64" height="64" rx="14" fill="#0e5c4a"/>
+  <path fill="#f4efe6" d="M14 16h6.2v12.2h11.2V16H38v32h-6.6V34.4H20.2V48H14V16z"/>
+  <circle cx="48" cy="32" r="8.2" fill="none" stroke="#f4efe6" stroke-width="4.2"/>
+</svg>
+        <span class="brand-text">Harrison Ouka<small>Software Developer</small></span>
+      </a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="menu-closed">Menu</span><span class="menu-open">Close</span></button>
+      <nav class="site-nav" id="site-nav" data-nav aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Switch to dark theme">
+          <span class="when-light">Dark</span>
+          <span class="when-dark">Light</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main id="content" tabindex="-1">
+    <div class="wrap">
+      <article class="prose">
+        <header class="page-intro">
+          <p class="kicker">Notes</p>
+          <h1>What C pointers and the shell are for</h1>
+          <p class="byline">By <a href="/about/">Harrison Odhiambo Ouka</a> · <time datetime="2026-11-12">12 November 2026</time> · 4 min read</p>
+        </header>
+        <p>I went through the ALX software engineering coursework in public. The repositories are still on my GitHub: <a href="https://github.com/Oukaharry/alx-low_level_programming">alx-low_level_programming</a> for C, <a href="https://github.com/Oukaharry/alx-system_engineering-devops">alx-system_engineering-devops</a> for the shell, and <a href="https://github.com/Oukaharry/CPointers">CPointers</a> for the pointer exercises on their own. <a href="https://github.com/Oukaharry/alx-pre_course">alx-pre_course</a> and <a href="https://github.com/Oukaharry/alx-zero_day">alx-zero_day</a> say in their descriptions that they were my first repositories as an ALX student. None of this is a product. It is the layer under the products. I am a software developer who spends most of the time in MQL4 and Python, and both hide memory. C does not, which is why I keep the exercises next to the trading tools.</p>
+
+<h2>An address is not the value</h2>
+
+<p>The first CPointers program prints <code>sizeof(char)</code>, <code>sizeof(int)</code>, <code>sizeof(float)</code>, and <code>sizeof</code> a local <code>int</code>. Those numbers depend on the machine. The next program declares <code>int *p</code> and prints <code>sizeof(p)</code>. A pointer has a fixed width because it stores an address, not the object. A pointer to a char and a pointer to a large struct are the same size. The things they point at are not. Mixing the two up is how a buffer gets allocated too small.</p>
+
+<p>The following program sets an <code>int n</code> to 98 and a pointer <code>p</code> to <code>&amp;n</code>, then prints both addresses. They match. <code>p</code> does not contain 98. It contains the location where 98 is stored. The program after that writes through the pointer.</p>
+
+<pre><code>int n;
+int *p;
+
+n = 98;
+p = &amp;n;
+*p = 402; /* n is now 402 */</code></pre>
+
+<p>That is the mechanism behind every later exercise that has to hand back more than one result. C can return a single value, or it can take a pointer and let the function write into the caller's variable. The same idea is in <code>0x05-pointers_arrays_strings</code> in the low-level repository. <code>reset_to_98</code> takes an <code>int</code> pointer and writes 98 through it. <code>swap</code> exchanges two integers by pointer, because a function that received them by value would exchange its own copies and leave the caller alone.</p>
+
+<p>A C string is a pointer to the first character, with a zero byte somewhere after it. <code>strlen</code> walks until that byte. <code>strcpy</code> writes through the destination pointer. <code>print_rev</code> only makes sense if you can move a pointer and you also know the length. The length and the address are different facts. The header in that project, <code>holberton.h</code>, collects the declarations, and each <code>.c</code> file does one job. I still want that split when a file gets large. The trade-manager advisor is one translation unit, and placing an order, drawing a line, and closing a slice are easier to check when they are not the same function.</p>
+
+<h2>Arrays decay, and function pointers are addresses</h2>
+
+<p>An array name in an expression is the address of the first element. That is why you can pass an array to a function written for a pointer, and why <code>sizeof</code> on the parameter is the size of a pointer rather than the size of the array. Print the size at the call site, where the compiler still knows the array type, and pass the length yourself.</p>
+
+<p>Later directories move from data pointers to function pointers (<code>0x0F-function_pointers</code>) and variadic functions (<code>0x10-variadic_functions</code>). A function pointer is the address of code. You store it, pass it, and call it. The syntax is louder than a Python callable. The idea is the same one I use when a chart level stores an action, "move the stop" or "do nothing", and another function performs it. Variadic functions, the family <code>printf</code> belongs to, punish a wrong format string. The CPointers programs use <code>%p</code> for addresses and <code>%d</code> for the int. A mismatch is undefined, and it will not always crash on the machine where you tried it. One of those files misspells "address" in the format string. It still compiles. The compiler is not a proofreader.</p>
+
+<h2>The shell is part of the language</h2>
+
+<p><code>alx-system_engineering-devops</code> is where the C programs actually run. The published directories are shell basics, permissions, redirections, and variable expansions: print the working directory, list files, move them, and tell a file from a directory. The compiler writes a binary, the shell runs it, and the permission bits decide whether that run is allowed. Redirection keeps output you would otherwise watch scroll past. Variables stop a script from hard-coding a path.</p>
+
+<pre><code>pwd
+ls -la
+gcc -Wall -Wextra -pedantic 5-main.c -o deref
+./deref</code></pre>
+
+<p>I still start there. Before I read a Django traceback or a MetaTrader log, I want the directory, the file I am about to run, and where the output went. The sizeof programs are short enough that <code>-Wall</code> would be the whole review. The devops tree stops at variable expansion. That is already enough to build and inspect the C exercises beside it.</p>
+
+<h2>What transferred</h2>
+
+<p>The coursework did not teach MQL4, MQL5, or Django. It taught a way of reading that I use in both. When a partial close mis-counts a position, I look for a value that was copied when it should have been shared, which is the <code>swap</code> lesson. When HedgePass Pro grows a second model with the same account fields, <code>AccountPair</code> and <code>MT5Account</code>, I look for one structure and a reference to it. When a C program and a Python program disagree about a number, I check the width of the type before the formula.</p>
+
+<p>If you are starting the same projects, draw them first. Draw the box for <code>n</code>, the box for <code>p</code>, and the arrow, then write <code>*p = 402</code> and update <code>n</code>. CPointers is that drawing. <code>alx-low_level_programming</code> is strings, libraries, and function pointers. <code>alx-system_engineering-devops</code> is the shell that runs the binary. I keep them public so the foundation sits next to the trading tools. The product work is the expert advisor and the Django app. The C is how I check my own assumptions when those programs misbehave.</p>
+        <nav class="note" aria-label="More from the blog">
+          <p>More from Harrison Odhiambo Ouka</p>
+          <ul>
+            <li><a href="/blog/on-chart-trade-manager-mql4/">Building an on-chart trade manager in MQL4</a></li><li><a href="/blog/django-account-pairs/">Pairing live and prop-firm accounts in Django</a></li>
+          </ul>
+        </nav>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>Harrison Odhiambo Ouka · Harry Ouka · Ouka Harry · Software developer in Nairobi, Kenya.</p>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="/about/">About</a>
+        <a href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact/">Contact</a>
+        <a href="/feed.xml">RSS</a>
+        <a href="https://github.com/Oukaharry">GitHub</a>
+        <a href="https://www.linkedin.com/in/harrisonouka/">LinkedIn</a>
+        <a href="https://dev.to/harrisonouka">DEV</a>
+      </nav>
+    </div>
+  </footer>
+  <script src="/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<p>HedgePass Pro is a Django project I published for prop-firm challenge hedging and trade management. The public app has a landing page, signup and login, a client area, account management, performance pages, and settings. A demo is at <a href="https://hedgepass-pro.vercel.app">hedgepass-pro.vercel.app</a>, and the source is at <a href="https://github.com/Oukaharry/hedgepass-pro">github.com/Oukaharry/hedgepass-pro</a>. I am a software developer writing about the data model. This is not a trading strategy. The repository says the software does not manage accounts and does not give trading advice.</p>
+
+<h2>A pair is the unit of work</h2>
+
+<p>The app is aimed at two accounts that have to be thought about together: a live account and a prop-firm account. Both <code>AccountPair</code> and <code>MT5Account</code> carry an account type of <code>LIVE</code> or <code>PROP</code>, an account number, a server name, a pair number, an active flag, a timestamp, and a foreign key to the user. The unique constraint is <code>(user, account_type, pair_number)</code>. Pair 1 can hold one live row and one prop row for the same person. A second live row with the same pair number is a database error, not a display bug you find later.</p>
+
+<p><code>unique_together</code> holds the rule because views forget. Filtering on <code>is_active</code> lets you retire a pair without deleting it. The user model is a thin <code>AbstractUser</code> with <code>is_premium</code> and an <code>mt5_license</code> field added to Django's username and email.</p>
+
+<p><code>AUTH_USER_MODEL</code> is set to <code>main.User</code>. In <code>settings.py</code> it is assigned twice: first to <code>auth.User</code>, then to <code>main.User</code>. The later line wins. A custom user has to be decided before the first migration, because swapping it afterwards means rebuilding the database. I would delete the early assignment so the setting cannot drift.</p>
+
+<pre><code>class AccountPair(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    account_type = models.CharField(max_length=4, choices=ACCOUNT_TYPES)
+    pair_number = models.IntegerField(default=1)
+
+    class Meta:
+        unique_together = ("user", "account_type", "pair_number")</code></pre>
+
+<h2>Passwords at rest</h2>
+
+<p>Account numbers are not particularly secret. The trading password is. The form uses <code>PasswordInput</code>, and the model encrypts the value with Fernet, from the <code>cryptography</code> library, inside <code>save</code> before the row hits SQLite. Fernet needs a key. The project already reads the Django secret key from the environment. The encryption key belongs there too, not in the repository.</p>
+
+<p>Reversible encryption is not hashing. Hash a password when you never need the original; a broker password has to be presented later, so Fernet fits and a one-way hash does not. Encrypt on every write. <code>AccountPair.save</code> only encrypts when <code>pk</code> is missing, so a later edit can store plaintext, while <code>MT5Account.save</code> tries to cover updates. Use one helper for both. Skip values that are already Fernet tokens, or a resave double-encrypts them. Keep the password out of logs, the admin list, and templates.</p>
+
+<p>The installed apps also include <code>django_cryptography</code> beside the manual Fernet calls. One approach is enough. Two ways to encrypt the same column is how a row becomes unreadable after a deploy.</p>
+
+<h2>The pages follow the login</h2>
+
+<p><code>urls.py</code> splits the site into a public landing page and views wrapped in <code>login_required</code>: add an account, list pairs, the client area, account management, performance, portfolio performance, and settings. Login redirects to the client area. Logout returns to the landing page. WhiteNoise serves static files. Templates live under <code>main/templates/main</code>, and the front end in the repository is HTML, CSS, and JavaScript. The development database is SQLite.</p>
+
+<p>The landing route is registered twice under the same name. Django uses the last stored name when you reverse a URL, and the first pattern when it matches a request. It works until someone reorders the list. One path, one name.</p>
+
+<p>The performance view is the seam I would close next. It looks up <code>AccountPair</code> with both the id and <code>request.user</code>, which is the right check. The URL that points at it does not pass a <code>pair_id</code>, while the view requires one. The view also fills the template with placeholder profit and win-rate numbers, marked in the source as figures to replace. Those figures are not account results. I would not ship the view until the path and the function agree, and I would keep the user filter on every query added along the way.</p>
+
+<p>The README's local setup is a virtual environment, dependencies, <code>migrate</code>, and <code>runserver</code>. Its activate line uses the Windows <code>Scripts</code> path; on Linux or macOS the script is in <code>bin</code>.</p>
+
+<h2>What not to commit</h2>
+
+<p>The public tree contains a development <code>db.sqlite3</code>, compiled <code>__pycache__</code> files, and an environment file. None of those belong in git. Bytecode is specific to a Python version. A SQLite file can hold user rows and encrypted passwords. An environment file is where the secret key and the Fernet key live. Ignore <code>__pycache__/</code>, <code>db.sqlite3</code>, and <code>.env</code> in the first commit, not the cleanup commit.</p>
+
+<p>Deleting them later is not enough if they were pushed. History still has the blob. Rotate the keys and treat the old database as exposed. Encryption does not help once the key shipped beside the ciphertext. I am not pasting that environment file here. The lesson is that the file is in the tree.</p>
+
+<h2>A small shape that can grow</h2>
+
+<p>The model is a user, a pair number, two account types, and a password encrypted before it rests. Keep order execution behind a boundary that receives an account id, decrypts on the server, and never returns the password to the browser. The client area can stay a view that lists pairs the logged-in user owns.</p>
+
+<p>That is the part I would carry forward: a pair as a database constraint, secrets outside the repository, and every account query scoped to the logged-in user. <a href="/blog/on-chart-trade-manager-mql4/">TradeManagerEA</a> does the chart side of the same work. They meet at an account number that should never be logged next to a password.</p>
+
+<p class="note">Trading can lose money. This article is about the Django project as published. The placeholder figures in the performance view are not results, and nothing here is trading advice.</p>

@@ -1,0 +1,51 @@
+<p>A trade manager is not a strategy. It does not decide that a moving average has crossed. It takes an order you already want and gives you a reliable way to place it, mark the levels, and scale out. That is the idea behind <a href="https://github.com/Oukaharry/TradeManagerEA">TradeManagerEA</a>, the MetaTrader 4 expert advisor in my public repository. Version 2.0 is one MQL4 file: an on-chart panel, stop-loss and take-profit lines, and partial-close handling. I am a software developer, and this note is about the structure of that file, not about a setup to trade.</p>
+
+<h2>Draw the panel with chart objects</h2>
+
+<p>MetaTrader 4 does not give an expert advisor a normal window toolkit. The practical interface is the chart. TradeManagerEA builds its panel in <code>OnInit</code> with <code>OBJ_RECTANGLE_LABEL</code> for the background and labels, buttons, and edit fields for the controls. The panel is anchored to the upper-left corner, given a fixed pixel size, and marked hidden so it does not sit among the analysis lines a person drew themselves.</p>
+
+<p>Name objects with a prefix you own, and delete by that prefix so a cleanup does not remove someone else's trend lines. Create the panel once. Calling <code>ObjectCreate</code> on every tick leaks objects and flickers the chart. Clicks belong in <code>OnChartEvent</code>. A one-second timer is a better housekeeper than <code>OnTick</code>, because ticks arrive in bursts and then stop. The advisor calls <code>EventSetTimer(1)</code> and uses it to redraw levels and run the partial-close check.</p>
+
+<h2>One magic number, one symbol</h2>
+
+<p>The file tags orders with magic number 489753 and the comment <code>TradeManagerEA</code>, and it skips other symbols and other magic numbers. Two copies on one terminal need two magic numbers, or they manage each other's positions.</p>
+
+<p>Market orders go out through <code>OrderSend</code> at <code>Bid</code> or <code>Ask</code>, with a small slippage and no initial stop. Levels are lines you drag afterwards. Pending orders are separate functions for stop and limit, each passing the chosen price.</p>
+
+<pre><code>int ticket = OrderSend(Symbol(), OP_BUY, lots, Ask, slippage,
+                        0, 0, "TradeManagerEA", magic, clrBlue);
+if(ticket &lt; 0)
+   Print("OrderSend failed: ", ErrorDescription(GetLastError()));</code></pre>
+
+<p>A negative ticket means the server rejected the request. <code>GetLastError</code> and <code>ErrorDescription</code> from <code>stdlib.mqh</code> turn a dead button into something you can act on: invalid volume, a closed market, a busy trade context.</p>
+
+<h2>Partial closes are a percentage plus an action</h2>
+
+<p>The useful part of the advisor is the ability to mark a price, choose a percent of the position to close, and choose what happens to the rest. The loop walks open orders for the current symbol and magic number, then walks chart objects whose names contain the open price. Each level stores a description split on commas: a percent, an action, and an optional extra volume.</p>
+
+<p>The actions are specific. "Nothing" only closes the chosen percent. "Move SL to BE" closes that slice and moves the stop of the remainder to the open price. "SL to Previous TP" moves the stop to the previous target. "Add lots" opens an extra position and still closes a slice of the original. Stops and targets use different colors so the loop can tell them apart. After a level fires, the object is painted in the chart background and sent behind the candles so it does not fire again.</p>
+
+<p>Volume is the first place this fails on a real ticket. The file computes the slice as a percent of <code>OrderLots</code> and will not go below 0.01. That floor is not universal. Normalize to the symbol's volume step. If the broker's minimum is 0.1, a 0.01 close is rejected even though the arithmetic looked fine.</p>
+
+<p>The close price is the second. <code>OrderClose</code> asks for the price you will transact at now. Close a buy at <code>Bid</code> and a sell at <code>Ask</code>. The partial-close path in the published file passes the position's open price, so the request only succeeds while the market is still on the entry. When you extend the function, pass the live quote.</p>
+
+<pre><code>double price = (OrderType() == OP_BUY) ? Bid : Ask;
+bool closed = OrderClose(OrderTicket(), volume, price, slippage);
+if(!closed)
+   Print("OrderClose failed: ", ErrorDescription(GetLastError()));</code></pre>
+
+<p><code>OrderModify</code> has the same constraint: a stop on the wrong side of the price is rejected, and the chart line then lies. Hide the object only after the server accepts the change.</p>
+
+<h2>A point is not a constant</h2>
+
+<p>A helper, <code>point()</code>, looks at <code>MODE_DIGITS</code> and the symbol name. One-digit quotes return 1. Four- and five-digit quotes return 0.0001. Two- and three-digit quotes return 0.01, unless the bid is above 1000, in which case they return 1. A later branch returns 0.1 when the name contains <code>XAU</code> or <code>GOLD</code>.</p>
+
+<p>Read the branches in order. A typical gold quote has two digits and a bid well above 1000, so it returns 1 and never reaches the gold branch. The special case is dead for the symbol it names. The first matching return wins, and a comment that says "gold" does not mean that path runs. Log the helper's result once in <code>OnInit</code> for the symbol on the chart.</p>
+
+<h2>What I would keep</h2>
+
+<p>I would keep the split between a panel that places orders and a timer that manages levels. I would keep magic-number filtering, and I would keep partial closes as data on the line rather than a new dialog for every ticket. I would not keep a close request that sends the open price, and I would not trust the pip helper until I had printed its result.</p>
+
+<p>The repository is MQL4, version 2.0. My profile also lists MQL5 for the same kind of freelance work, but this file is the one you can read. An MQL5 port is not a rename: positions replace the <code>OrderSelect</code> pool. The discipline carries: one identity for your orders, an error string when the server says no, and levels that match the symbol on the chart.</p>
+
+<p class="note">Trading financial instruments can lose money. This article is about how the expert advisor is put together. It is not a recommendation to run it, and it is not trading advice.</p>

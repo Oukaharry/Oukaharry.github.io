@@ -1,0 +1,22 @@
+{
+  "name": "Harrison Odhiambo Ouka",
+  "short_name": "Harry Ouka",
+  "description": "Software developer in Nairobi, Kenya. Also known as Ouka Harry.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3efe6",
+  "theme_color": "#0e5c4a",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/assets/favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

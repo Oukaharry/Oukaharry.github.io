@@ -1,0 +1,41 @@
+<p>I went through the ALX software engineering coursework in public. The repositories are still on my GitHub: <a href="https://github.com/Oukaharry/alx-low_level_programming">alx-low_level_programming</a> for C, <a href="https://github.com/Oukaharry/alx-system_engineering-devops">alx-system_engineering-devops</a> for the shell, and <a href="https://github.com/Oukaharry/CPointers">CPointers</a> for the pointer exercises on their own. <a href="https://github.com/Oukaharry/alx-pre_course">alx-pre_course</a> and <a href="https://github.com/Oukaharry/alx-zero_day">alx-zero_day</a> say in their descriptions that they were my first repositories as an ALX student. None of this is a product. It is the layer under the products. I am a software developer who spends most of the time in MQL4 and Python, and both hide memory. C does not, which is why I keep the exercises next to the trading tools.</p>
+
+<h2>An address is not the value</h2>
+
+<p>The first CPointers program prints <code>sizeof(char)</code>, <code>sizeof(int)</code>, <code>sizeof(float)</code>, and <code>sizeof</code> a local <code>int</code>. Those numbers depend on the machine. The next program declares <code>int *p</code> and prints <code>sizeof(p)</code>. A pointer has a fixed width because it stores an address, not the object. A pointer to a char and a pointer to a large struct are the same size. The things they point at are not. Mixing the two up is how a buffer gets allocated too small.</p>
+
+<p>The following program sets an <code>int n</code> to 98 and a pointer <code>p</code> to <code>&amp;n</code>, then prints both addresses. They match. <code>p</code> does not contain 98. It contains the location where 98 is stored. The program after that writes through the pointer.</p>
+
+<pre><code>int n;
+int *p;
+
+n = 98;
+p = &amp;n;
+*p = 402; /* n is now 402 */</code></pre>
+
+<p>That is the mechanism behind every later exercise that has to hand back more than one result. C can return a single value, or it can take a pointer and let the function write into the caller's variable. The same idea is in <code>0x05-pointers_arrays_strings</code> in the low-level repository. <code>reset_to_98</code> takes an <code>int</code> pointer and writes 98 through it. <code>swap</code> exchanges two integers by pointer, because a function that received them by value would exchange its own copies and leave the caller alone.</p>
+
+<p>A C string is a pointer to the first character, with a zero byte somewhere after it. <code>strlen</code> walks until that byte. <code>strcpy</code> writes through the destination pointer. <code>print_rev</code> only makes sense if you can move a pointer and you also know the length. The length and the address are different facts. The header in that project, <code>holberton.h</code>, collects the declarations, and each <code>.c</code> file does one job. I still want that split when a file gets large. The trade-manager advisor is one translation unit, and placing an order, drawing a line, and closing a slice are easier to check when they are not the same function.</p>
+
+<h2>Arrays decay, and function pointers are addresses</h2>
+
+<p>An array name in an expression is the address of the first element. That is why you can pass an array to a function written for a pointer, and why <code>sizeof</code> on the parameter is the size of a pointer rather than the size of the array. Print the size at the call site, where the compiler still knows the array type, and pass the length yourself.</p>
+
+<p>Later directories move from data pointers to function pointers (<code>0x0F-function_pointers</code>) and variadic functions (<code>0x10-variadic_functions</code>). A function pointer is the address of code. You store it, pass it, and call it. The syntax is louder than a Python callable. The idea is the same one I use when a chart level stores an action, "move the stop" or "do nothing", and another function performs it. Variadic functions, the family <code>printf</code> belongs to, punish a wrong format string. The CPointers programs use <code>%p</code> for addresses and <code>%d</code> for the int. A mismatch is undefined, and it will not always crash on the machine where you tried it. One of those files misspells "address" in the format string. It still compiles. The compiler is not a proofreader.</p>
+
+<h2>The shell is part of the language</h2>
+
+<p><code>alx-system_engineering-devops</code> is where the C programs actually run. The published directories are shell basics, permissions, redirections, and variable expansions: print the working directory, list files, move them, and tell a file from a directory. The compiler writes a binary, the shell runs it, and the permission bits decide whether that run is allowed. Redirection keeps output you would otherwise watch scroll past. Variables stop a script from hard-coding a path.</p>
+
+<pre><code>pwd
+ls -la
+gcc -Wall -Wextra -pedantic 5-main.c -o deref
+./deref</code></pre>
+
+<p>I still start there. Before I read a Django traceback or a MetaTrader log, I want the directory, the file I am about to run, and where the output went. The sizeof programs are short enough that <code>-Wall</code> would be the whole review. The devops tree stops at variable expansion. That is already enough to build and inspect the C exercises beside it.</p>
+
+<h2>What transferred</h2>
+
+<p>The coursework did not teach MQL4, MQL5, or Django. It taught a way of reading that I use in both. When a partial close mis-counts a position, I look for a value that was copied when it should have been shared, which is the <code>swap</code> lesson. When HedgePass Pro grows a second model with the same account fields, <code>AccountPair</code> and <code>MT5Account</code>, I look for one structure and a reference to it. When a C program and a Python program disagree about a number, I check the width of the type before the formula.</p>
+
+<p>If you are starting the same projects, draw them first. Draw the box for <code>n</code>, the box for <code>p</code>, and the arrow, then write <code>*p = 402</code> and update <code>n</code>. CPointers is that drawing. <code>alx-low_level_programming</code> is strings, libraries, and function pointers. <code>alx-system_engineering-devops</code> is the shell that runs the binary. I keep them public so the foundation sits next to the trading tools. The product work is the expert advisor and the Django app. The C is how I check my own assumptions when those programs misbehave.</p>

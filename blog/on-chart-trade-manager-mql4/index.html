@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (err) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+      document.documentElement.classList.remove("no-js");
+      document.documentElement.classList.add("js");
+    })();
+  </script>
+  <title>On-Chart MQL4 Trade Managers · Harry Ouka, Software Developer</title>
+  <meta name="description" content="Harrison Odhiambo Ouka (Harry Ouka), a software developer, on the structure of TradeManagerEA: chart-object panels, magic numbers, partial closes, and pip sizes in MQL4." />
+  <meta name="author" content="Harrison Odhiambo Ouka" />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
+  <meta name="theme-color" content="#f3efe6" />
+  <link rel="canonical" href="https://oukaharry.github.io/blog/on-chart-trade-manager-mql4/" />
+  <link rel="alternate" hreflang="en" href="https://oukaharry.github.io/blog/on-chart-trade-manager-mql4/" />
+  <link rel="alternate" type="application/rss+xml" title="Harrison Odhiambo Ouka — RSS" href="https://oukaharry.github.io/feed.xml" />
+  <link rel="alternate" type="application/atom+xml" title="Harrison Odhiambo Ouka — Atom" href="https://oukaharry.github.io/atom.xml" />
+  <link rel="me" href="https://github.com/Oukaharry" />
+  <link rel="me" href="https://www.linkedin.com/in/harrisonouka/" />
+  <link rel="me" href="https://dev.to/harrisonouka" />
+  <meta property="og:site_name" content="Harrison Odhiambo Ouka" />
+  <meta property="og:locale" content="en_KE" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="On-Chart MQL4 Trade Managers · Harry Ouka, Software Developer" />
+  <meta property="og:description" content="Harrison Odhiambo Ouka (Harry Ouka), a software developer, on the structure of TradeManagerEA: chart-object panels, magic numbers, partial closes, and pip sizes in MQL4." />
+  <meta property="og:url" content="https://oukaharry.github.io/blog/on-chart-trade-manager-mql4/" />
+  <meta property="og:image" content="https://oukaharry.github.io/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Harrison Odhiambo Ouka, software developer in Nairobi, also known as Harry Ouka and Ouka Harry." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="On-Chart MQL4 Trade Managers · Harry Ouka, Software Developer" />
+  <meta name="twitter:description" content="Harrison Odhiambo Ouka (Harry Ouka), a software developer, on the structure of TradeManagerEA: chart-object panels, magic numbers, partial closes, and pip sizes in MQL4." />
+  <meta name="twitter:image" content="https://oukaharry.github.io/assets/og.png" />
+  <meta name="twitter:image:alt" content="Harrison Odhiambo Ouka, software developer in Nairobi, also known as Harry Ouka and Ouka Harry." />
+  <!--
+  Google Search Console verification placeholder.
+  Set GOOGLE_SITE_VERIFICATION in /config/search-console.txt
+  (replace PASTE_TOKEN_HERE), then run: python3 scripts/build_site.py
+  The meta tag to add is:
+  <meta name="google-site-verification" content="PASTE_TOKEN_HERE" />
+-->
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <link rel="stylesheet" href="/css/styles.css" />
+  <meta property="article:published_time" content="2026-11-04" />
+  <meta property="article:modified_time" content="2026-11-12" />
+  <meta property="article:author" content="Harrison Odhiambo Ouka" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://oukaharry.github.io/#person",
+      "name": "Harrison Odhiambo Ouka",
+      "alternateName": [
+        "Harry Ouka",
+        "Ouka Harry",
+        "Harrison Ouka"
+      ],
+      "jobTitle": "Software Developer",
+      "url": "https://oukaharry.github.io/",
+      "email": "harryodhiambo17@gmail.com",
+      "image": "https://oukaharry.github.io/assets/og.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Nairobi",
+        "addressCountry": "KE"
+      },
+      "alumniOf": {
+        "@type": "CollegeOrUniversity",
+        "name": "The Catholic University of Eastern Africa"
+      },
+      "hasCredential": {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "degree",
+        "name": "BSc Computer Science",
+        "description": "2017–2021",
+        "recognizedBy": {
+          "@type": "CollegeOrUniversity",
+          "name": "The Catholic University of Eastern Africa"
+        }
+      },
+      "worksFor": {
+        "@type": "Organization",
+        "name": "blueedgefinancial.com",
+        "url": "https://blueedgefinancial.com/"
+      },
+      "hasOccupation": [
+        {
+          "@type": "Occupation",
+          "name": "Software Developer",
+          "description": "Software Developer at blueedgefinancial.com since September 2020"
+        },
+        {
+          "@type": "Occupation",
+          "name": "Foreign Exchange Consultant",
+          "description": "Freelance"
+        }
+      ],
+      "sameAs": [
+        "https://github.com/Oukaharry",
+        "https://www.linkedin.com/in/harrisonouka/",
+        "https://dev.to/harrisonouka",
+        "https://www.mql5.com/en/users/_mrharry",
+        "https://www.mql5.com/en/users/_harrison"
+      ]
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://oukaharry.github.io/blog/on-chart-trade-manager-mql4/#post",
+      "headline": "Building an on-chart trade manager in MQL4",
+      "description": "Harrison Odhiambo Ouka (Harry Ouka), a software developer, on the structure of TradeManagerEA: chart-object panels, magic numbers, partial closes, and pip sizes in MQL4.",
+      "datePublished": "2026-11-04",
+      "dateModified": "2026-11-12",
+      "wordCount": 1000,
+      "inLanguage": "en",
+      "mainEntityOfPage": "https://oukaharry.github.io/blog/on-chart-trade-manager-mql4/",
+      "url": "https://oukaharry.github.io/blog/on-chart-trade-manager-mql4/",
+      "image": "https://oukaharry.github.io/assets/og.png",
+      "author": {
+        "@id": "https://oukaharry.github.io/#person"
+      },
+      "publisher": {
+        "@id": "https://oukaharry.github.io/#person"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="/">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="HO, initials of Harrison Odhiambo Ouka" width="36" height="36">
+  <rect width="64" height="64" rx="14" fill="#0e5c4a"/>
+  <path fill="#f4efe6" d="M14 16h6.2v12.2h11.2V16H38v32h-6.6V34.4H20.2V48H14V16z"/>
+  <circle cx="48" cy="32" r="8.2" fill="none" stroke="#f4efe6" stroke-width="4.2"/>
+</svg>
+        <span class="brand-text">Harrison Ouka<small>Software Developer</small></span>
+      </a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Open menu"><span class="menu-closed">Menu</span><span class="menu-open">Close</span></button>
+      <nav class="site-nav" id="site-nav" data-nav aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/about/">About</a>
+        <a href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Switch to dark theme">
+          <span class="when-light">Dark</span>
+          <span class="when-dark">Light</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  <main id="content" tabindex="-1">
+    <div class="wrap">
+      <article class="prose">
+        <header class="page-intro">
+          <p class="kicker">Notes</p>
+          <h1>Building an on-chart trade manager in MQL4</h1>
+          <p class="byline">By <a href="/about/">Harrison Odhiambo Ouka</a> · <time datetime="2026-11-04">4 November 2026</time> · 5 min read</p>
+        </header>
+        <p>A trade manager is not a strategy. It does not decide that a moving average has crossed. It takes an order you already want and gives you a reliable way to place it, mark the levels, and scale out. That is the idea behind <a href="https://github.com/Oukaharry/TradeManagerEA">TradeManagerEA</a>, the MetaTrader 4 expert advisor in my public repository. Version 2.0 is one MQL4 file: an on-chart panel, stop-loss and take-profit lines, and partial-close handling. I am a software developer, and this note is about the structure of that file, not about a setup to trade.</p>
+
+<h2>Draw the panel with chart objects</h2>
+
+<p>MetaTrader 4 does not give an expert advisor a normal window toolkit. The practical interface is the chart. TradeManagerEA builds its panel in <code>OnInit</code> with <code>OBJ_RECTANGLE_LABEL</code> for the background and labels, buttons, and edit fields for the controls. The panel is anchored to the upper-left corner, given a fixed pixel size, and marked hidden so it does not sit among the analysis lines a person drew themselves.</p>
+
+<p>Name objects with a prefix you own, and delete by that prefix so a cleanup does not remove someone else's trend lines. Create the panel once. Calling <code>ObjectCreate</code> on every tick leaks objects and flickers the chart. Clicks belong in <code>OnChartEvent</code>. A one-second timer is a better housekeeper than <code>OnTick</code>, because ticks arrive in bursts and then stop. The advisor calls <code>EventSetTimer(1)</code> and uses it to redraw levels and run the partial-close check.</p>
+
+<h2>One magic number, one symbol</h2>
+
+<p>The file tags orders with magic number 489753 and the comment <code>TradeManagerEA</code>, and it skips other symbols and other magic numbers. Two copies on one terminal need two magic numbers, or they manage each other's positions.</p>
+
+<p>Market orders go out through <code>OrderSend</code> at <code>Bid</code> or <code>Ask</code>, with a small slippage and no initial stop. Levels are lines you drag afterwards. Pending orders are separate functions for stop and limit, each passing the chosen price.</p>
+
+<pre><code>int ticket = OrderSend(Symbol(), OP_BUY, lots, Ask, slippage,
+                        0, 0, "TradeManagerEA", magic, clrBlue);
+if(ticket &lt; 0)
+   Print("OrderSend failed: ", ErrorDescription(GetLastError()));</code></pre>
+
+<p>A negative ticket means the server rejected the request. <code>GetLastError</code> and <code>ErrorDescription</code> from <code>stdlib.mqh</code> turn a dead button into something you can act on: invalid volume, a closed market, a busy trade context.</p>
+
+<h2>Partial closes are a percentage plus an action</h2>
+
+<p>The useful part of the advisor is the ability to mark a price, choose a percent of the position to close, and choose what happens to the rest. The loop walks open orders for the current symbol and magic number, then walks chart objects whose names contain the open price. Each level stores a description split on commas: a percent, an action, and an optional extra volume.</p>
+
+<p>The actions are specific. "Nothing" only closes the chosen percent. "Move SL to BE" closes that slice and moves the stop of the remainder to the open price. "SL to Previous TP" moves the stop to the previous target. "Add lots" opens an extra position and still closes a slice of the original. Stops and targets use different colors so the loop can tell them apart. After a level fires, the object is painted in the chart background and sent behind the candles so it does not fire again.</p>
+
+<p>Volume is the first place this fails on a real ticket. The file computes the slice as a percent of <code>OrderLots</code> and will not go below 0.01. That floor is not universal. Normalize to the symbol's volume step. If the broker's minimum is 0.1, a 0.01 close is rejected even though the arithmetic looked fine.</p>
+
+<p>The close price is the second. <code>OrderClose</code> asks for the price you will transact at now. Close a buy at <code>Bid</code> and a sell at <code>Ask</code>. The partial-close path in the published file passes the position's open price, so the request only succeeds while the market is still on the entry. When you extend the function, pass the live quote.</p>
+
+<pre><code>double price = (OrderType() == OP_BUY) ? Bid : Ask;
+bool closed = OrderClose(OrderTicket(), volume, price, slippage);
+if(!closed)
+   Print("OrderClose failed: ", ErrorDescription(GetLastError()));</code></pre>
+
+<p><code>OrderModify</code> has the same constraint: a stop on the wrong side of the price is rejected, and the chart line then lies. Hide the object only after the server accepts the change.</p>
+
+<h2>A point is not a constant</h2>
+
+<p>A helper, <code>point()</code>, looks at <code>MODE_DIGITS</code> and the symbol name. One-digit quotes return 1. Four- and five-digit quotes return 0.0001. Two- and three-digit quotes return 0.01, unless the bid is above 1000, in which case they return 1. A later branch returns 0.1 when the name contains <code>XAU</code> or <code>GOLD</code>.</p>
+
+<p>Read the branches in order. A typical gold quote has two digits and a bid well above 1000, so it returns 1 and never reaches the gold branch. The special case is dead for the symbol it names. The first matching return wins, and a comment that says "gold" does not mean that path runs. Log the helper's result once in <code>OnInit</code> for the symbol on the chart.</p>
+
+<h2>What I would keep</h2>
+
+<p>I would keep the split between a panel that places orders and a timer that manages levels. I would keep magic-number filtering, and I would keep partial closes as data on the line rather than a new dialog for every ticket. I would not keep a close request that sends the open price, and I would not trust the pip helper until I had printed its result.</p>
+
+<p>The repository is MQL4, version 2.0. My profile also lists MQL5 for the same kind of freelance work, but this file is the one you can read. An MQL5 port is not a rename: positions replace the <code>OrderSelect</code> pool. The discipline carries: one identity for your orders, an error string when the server says no, and levels that match the symbol on the chart.</p>
+
+<p class="note">Trading financial instruments can lose money. This article is about how the expert advisor is put together. It is not a recommendation to run it, and it is not trading advice.</p>
+        <nav class="note" aria-label="More from the blog">
+          <p>More from Harrison Odhiambo Ouka</p>
+          <ul>
+            <li><a href="/blog/django-account-pairs/">Pairing live and prop-firm accounts in Django</a></li><li><a href="/blog/c-pointers-and-the-shell/">What C pointers and the shell are for</a></li>
+          </ul>
+        </nav>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>Harrison Odhiambo Ouka · Harry Ouka · Ouka Harry · Software developer in Nairobi, Kenya.</p>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="/about/">About</a>
+        <a href="/projects/">Projects</a>
+        <a href="/blog/">Blog</a>
+        <a href="/contact/">Contact</a>
+        <a href="/feed.xml">RSS</a>
+        <a href="https://github.com/Oukaharry">GitHub</a>
+        <a href="https://www.linkedin.com/in/harrisonouka/">LinkedIn</a>
+        <a href="https://dev.to/harrisonouka">DEV</a>
+      </nav>
+    </div>
+  </footer>
+  <script src="/js/site.js"></script>
+</body>
+</html>

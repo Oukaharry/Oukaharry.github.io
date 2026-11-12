@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Harrison Odhiambo Ouka — Software Developer</title>
+  <subtitle>Technical notes by Harrison Odhiambo Ouka (Harry Ouka / Ouka Harry), a software developer in Nairobi.</subtitle>
+  <link href="https://oukaharry.github.io/atom.xml" rel="self" />
+  <link href="https://oukaharry.github.io/blog/" rel="alternate" />
+  <id>https://oukaharry.github.io/blog/</id>
+  <updated>2026-11-12T00:00:00Z</updated>
+  <author><name>Harrison Odhiambo Ouka</name><email>harryodhiambo17@gmail.com</email></author>
+  <entry>
+    <title>What C pointers and the shell are for</title>
+    <link href="https://oukaharry.github.io/blog/c-pointers-and-the-shell/" rel="alternate" />
+    <id>https://oukaharry.github.io/blog/c-pointers-and-the-shell/</id>
+    <published>2026-11-12T00:00:00Z</published>
+    <updated>2026-11-12T00:00:00Z</updated>
+    <author><name>Harrison Odhiambo Ouka</name></author>
+    <summary>Software developer Harrison Odhiambo Ouka on his public ALX coursework: C pointers, arrays, function pointers, and the Unix shell commands that run the programs.</summary>
+  </entry>
+  <entry>
+    <title>Pairing live and prop-firm accounts in Django</title>
+    <link href="https://oukaharry.github.io/blog/django-account-pairs/" rel="alternate" />
+    <id>https://oukaharry.github.io/blog/django-account-pairs/</id>
+    <published>2026-11-08T00:00:00Z</published>
+    <updated>2026-11-12T00:00:00Z</updated>
+    <author><name>Harrison Odhiambo Ouka</name></author>
+    <summary>Ouka Harry (Harrison Odhiambo Ouka), software developer, on HedgePass Pro: Django models for live and prop accounts, Fernet encryption, and secrets that do not belong in git.</summary>
+  </entry>
+  <entry>
+    <title>Building an on-chart trade manager in MQL4</title>
+    <link href="https://oukaharry.github.io/blog/on-chart-trade-manager-mql4/" rel="alternate" />
+    <id>https://oukaharry.github.io/blog/on-chart-trade-manager-mql4/</id>
+    <published>2026-11-04T00:00:00Z</published>
+    <updated>2026-11-12T00:00:00Z</updated>
+    <author><name>Harrison Odhiambo Ouka</name></author>
+    <summary>Harrison Odhiambo Ouka (Harry Ouka), a software developer, on the structure of TradeManagerEA: chart-object panels, magic numbers, partial closes, and pip sizes in MQL4.</summary>
+  </entry>
+</feed>

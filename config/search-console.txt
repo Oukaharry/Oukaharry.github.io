@@ -1,0 +1,15 @@
+# Google Search Console — verification placeholder
+#
+# This file is the single place to put the HTML-tag verification token.
+# Search Console shows a tag like:
+#
+#   <meta name="google-site-verification" content="YOUR_TOKEN_HERE" />
+#
+# Paste only the content value below, replacing PASTE_TOKEN_HERE, then run:
+#
+#   python3 scripts/build_site.py
+#
+# Until a real token is set, the site does not emit a verification meta tag.
+# Each page's <head> keeps an HTML comment marking where that tag will go.
+#
+GOOGLE_SITE_VERIFICATION=PASTE_TOKEN_HERE

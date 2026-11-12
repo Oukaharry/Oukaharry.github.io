@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Harrison Odhiambo Ouka — Software Developer</title>
+    <link>https://oukaharry.github.io/blog/</link>
+    <description>Technical notes by Harrison Odhiambo Ouka (Harry Ouka / Ouka Harry), a software developer in Nairobi, Kenya.</description>
+    <language>en</language>
+    <lastBuildDate>Thu, 12 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>What C pointers and the shell are for</title>
+      <link>https://oukaharry.github.io/blog/c-pointers-and-the-shell/</link>
+      <guid isPermaLink="true">https://oukaharry.github.io/blog/c-pointers-and-the-shell/</guid>
+      <pubDate>Thu, 12 Nov 2026 00:00:00 +0000</pubDate>
+      <description>Software developer Harrison Odhiambo Ouka on his public ALX coursework: C pointers, arrays, function pointers, and the Unix shell commands that run the programs.</description>
+      <author>harryodhiambo17@gmail.com (Harrison Odhiambo Ouka)</author>
+    </item>
+    <item>
+      <title>Pairing live and prop-firm accounts in Django</title>
+      <link>https://oukaharry.github.io/blog/django-account-pairs/</link>
+      <guid isPermaLink="true">https://oukaharry.github.io/blog/django-account-pairs/</guid>
+      <pubDate>Sun, 08 Nov 2026 00:00:00 +0000</pubDate>
+      <description>Ouka Harry (Harrison Odhiambo Ouka), software developer, on HedgePass Pro: Django models for live and prop accounts, Fernet encryption, and secrets that do not belong in git.</description>
+      <author>harryodhiambo17@gmail.com (Harrison Odhiambo Ouka)</author>
+    </item>
+    <item>
+      <title>Building an on-chart trade manager in MQL4</title>
+      <link>https://oukaharry.github.io/blog/on-chart-trade-manager-mql4/</link>
+      <guid isPermaLink="true">https://oukaharry.github.io/blog/on-chart-trade-manager-mql4/</guid>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 +0000</pubDate>
+      <description>Harrison Odhiambo Ouka (Harry Ouka), a software developer, on the structure of TradeManagerEA: chart-object panels, magic numbers, partial closes, and pip sizes in MQL4.</description>
+      <author>harryodhiambo17@gmail.com (Harrison Odhiambo Ouka)</author>
+    </item>
+  </channel>
+</rss>
