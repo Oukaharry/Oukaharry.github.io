@@ -12,4 +12,4 @@
 # Until a real token is set, the site does not emit a verification meta tag.
 # Each page's <head> keeps an HTML comment marking where that tag will go.
 #
-GOOGLE_SITE_VERIFICATION=PASTE_TOKEN_HERE
+GOOGLE_SITE_VERIFICATION=8lw6pYyqUgJvPbNAnO6JrAWLmzO_mtM9JjmYScOlRK0
